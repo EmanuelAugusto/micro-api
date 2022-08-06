@@ -81,7 +81,6 @@ class AppController
 
         //replacing first and last forward slashes
         //$_SERVER['uri'] will be empty if req uri is /
-
         if (!empty($_SERVER['REQUEST_URI'])) {
             $route = preg_replace("/(^\/)|(\/$)/", "", $route);
             $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $_SERVER['REQUEST_URI']);
@@ -131,7 +130,6 @@ class AppController
         $reqUri = str_replace("/", '\\/', $reqUri);
 
         //now matching route with regex
-        //$this->createInstance($file, $params);
         if (preg_match("/$reqUri/", $route)) {
             $this->createInstance($file, $params);
             exit();
