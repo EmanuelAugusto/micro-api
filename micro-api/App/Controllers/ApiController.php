@@ -7,10 +7,9 @@ use App\Controllers\Controller;
 
 class ApiController extends Controller
 {
-    public function index(Request $request): string
+    public function index(Request $request, $id): string
     {
-
-        return $this->sendJson(['teste' => 1], 200, [
+        return $this->sendJson(['api' => true, 'param' => $id], 200, [
             'Cache-Control: no-store'
         ]);
     }
