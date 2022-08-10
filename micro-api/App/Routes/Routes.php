@@ -10,10 +10,11 @@ class Routes
     public static function RoutesList(): array
     {
         return [
-            "/teste/{id}" => [ApiController::class, 'index'],
-            '/' => [ApiController::class, 'index'],
-            '/{id}' => [ApiController::class, 'getById']
+            ["/teste", 'GET', ApiController::class, 'index'],
+            ["/teste/{id}", 'GET', ApiController::class, 'getById'],
+            ["/teste/{id}", 'POST', ApiController::class, 'create'],
+            ["/teste/{id}", 'PUT', ApiController::class, 'updateById'],
+            ["/teste/{id}", 'DELETE', ApiController::class, 'deleteById']
         ];
     }
-    
 }

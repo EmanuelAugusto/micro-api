@@ -27,6 +27,24 @@ class ApiController extends Controller
     public function getById(Request $request): string
     {
 
-        return $this->sendJson(['userName' => 'emanuel'], 200);
+        return $this->sendJson(['service' => 'getById'], 200);
+    }
+
+    public function create(Request $request): string
+    {
+
+        return $this->sendJson(['service' => 'create'], 200);
+    }
+
+    public function updateById(Request $request): string
+    {
+
+        return $this->sendJson(['service' => 'updateById'], 200);
+    }
+
+    public function deleteById(Request $request): string
+    {
+
+        return $this->sendJson(['service' => 'deleteById'], 200);
     }
 }
