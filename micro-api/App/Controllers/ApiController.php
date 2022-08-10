@@ -4,12 +4,22 @@ namespace App\Controllers;
 
 use Core\Requests\Request;
 use App\Controllers\Controller;
+use App\Services\ExampleService;
 
 class ApiController extends Controller
 {
-    public function index(Request $request, $id): string
+
+    private $serviceExample;
+
+    function __construct(ExampleService $serviceInject)
     {
-        return $this->sendJson(['api' => true, 'param' => $id], 200, [
+
+        $this->serviceExample = $serviceInject;
+    }
+
+    public function index(Request $request, $id = null): string
+    {
+        return $this->sendJson($this->serviceExample->getFoo(), 200, [
             'Cache-Control: no-store'
         ]);
     }

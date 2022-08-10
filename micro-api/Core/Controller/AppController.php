@@ -27,9 +27,38 @@ class AppController
         $class = $file[0];
         $method = $file[1];
 
+        $classRoute = $this->factoryClass($class);
+
         $request = new Request;
-        $classRoute = new $class();
+
         echo $classRoute->{$method}($request, ...array_values($params));
+    }
+
+    private function factoryClass($class)
+    {
+
+        $reflectionClass = new \ReflectionClass($class);
+
+        $constructor = $reflectionClass->getConstructor();
+
+        $argsClassConstructor = [];
+
+        if(!$constructor){
+            return new $class();
+        }
+
+        $parameters = $constructor->getParameters();
+
+        foreach ($parameters as $parameter) {
+
+            $className = $this->factoryClass($parameter->getClass()->name);
+
+            if ($className) {
+                array_push($argsClassConstructor, $className);
+            }
+        }
+
+        return new $class(...$argsClassConstructor);
     }
 
     private function simpleRoute($file, $route)
@@ -38,7 +67,6 @@ class AppController
 
         //replacing first and last forward slashes
         //$_SERVER['uri'] will be empty if req uri is /
-
         if (!empty($_SERVER['REQUEST_URI'])) {
             $route = preg_replace("/(^\/)|(\/$)/", "", $route);
             $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $_SERVER['REQUEST_URI']);
