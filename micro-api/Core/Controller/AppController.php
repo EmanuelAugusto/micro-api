@@ -33,9 +33,26 @@ class AppController
         $class = $file[2];
         $method = $file[3];
 
+        $haveMiddleware = $file[4] ?? null;
+
         $classRoute = $this->factoryClass($class);
 
         $request = new Request;
+
+
+        if ($haveMiddleware) {
+
+            $classMidleware = $this->factoryClass($haveMiddleware);
+
+            $midReturn = $classMidleware->handler($request);
+
+            if (!$midReturn instanceof Request) {
+                echo $midReturn;
+                exit;
+            }
+
+            $request = $midReturn;
+        }
 
         echo $classRoute->{$method}($request, ...array_values($params));
         exit;
@@ -71,9 +88,11 @@ class AppController
     private function simpleRoute($file, $route)
     {
 
-        if (!empty($_SERVER['REQUEST_URI'])) {
+        $PATH_ROUTE = explode('?', $_SERVER['REQUEST_URI'])[0] ?? $_SERVER['REQUEST_URI'];
+
+        if (!empty($PATH_ROUTE)) {
             $route = preg_replace("/(^\/)|(\/$)/", "", $route);
-            $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $_SERVER['REQUEST_URI']);
+            $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $PATH_ROUTE);
         } else {
             $reqUri = "/";
         }
@@ -94,7 +113,10 @@ class AppController
 
         $paramKey = [];
 
+        $PATH_ROUTE = explode('?', $_SERVER['REQUEST_URI'])[0] ?? $_SERVER['REQUEST_URI'];
+
         preg_match_all("/(?<={).+?(?=})/", $route, $paramMatches);
+
 
         if (empty($paramMatches[0])) {
             $this->simpleRoute($file, $route);
@@ -105,9 +127,9 @@ class AppController
             $paramKey[] = $key;
         }
 
-        if (!empty($_SERVER['REQUEST_URI'])) {
+        if (!empty($PATH_ROUTE)) {
             $route = preg_replace("/(^\/)|(\/$)/", "", $route);
-            $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $_SERVER['REQUEST_URI']);
+            $reqUri =  preg_replace("/(^\/)|(\/$)/", "", $PATH_ROUTE);
         } else {
             $reqUri = "/";
         }
@@ -141,10 +163,12 @@ class AppController
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
 
+        // var_dump($_SERVER['REQUEST_URI']);
+        // die();
+
         if (preg_match("/$reqUri/", $route) && $httpMethod === $file[1]) {
             $this->createInstance($file, $params);
             exit();
         }
     }
-
 }

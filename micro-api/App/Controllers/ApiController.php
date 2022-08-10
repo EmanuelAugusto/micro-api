@@ -17,32 +17,32 @@ class ApiController extends Controller
         $this->serviceExample = $serviceInject;
     }
 
-    public function index(Request $request, $id = null): string
+    public function index(Request $request, $id = null)
     {
         return $this->sendJson($this->serviceExample->getFoo(), 200, [
             'Cache-Control: no-store'
         ]);
     }
 
-    public function getById(Request $request): string
+    public function getById(Request $request)
     {
 
         return $this->sendJson(['service' => 'getById'], 200);
     }
 
-    public function create(Request $request): string
+    public function create(Request $request)
     {
 
         return $this->sendJson(['service' => 'create'], 200);
     }
 
-    public function updateById(Request $request): string
+    public function updateById(Request $request)
     {
 
         return $this->sendJson(['service' => 'updateById'], 200);
     }
 
-    public function deleteById(Request $request): string
+    public function deleteById(Request $request)
     {
 
         return $this->sendJson(['service' => 'deleteById'], 200);
