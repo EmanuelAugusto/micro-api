@@ -3,7 +3,7 @@
 namespace Core\Controller;
 
 use Core\Requests\Request;
-use App\Routes\Routes;
+use Core\Routes\Routes;
 
 class AppController
 {
@@ -12,9 +12,17 @@ class AppController
 
     private $Routes;
 
+    private $bootFiles = './App/Boot/BootFiles.php';
+
     public function __construct()
     {
-        $this->Routes = Routes::RoutesList();
+        $bootFiles = $this->fetchArray($this->bootFiles);
+
+        foreach ($bootFiles as $key => $value) {
+            include_once $value;
+        }
+
+        $this->Routes = Routes::getRoutes();
     }
 
     public function Run()
@@ -26,6 +34,11 @@ class AppController
 
         echo $this->sendJson(['error' => 'Not Found'], 404);
         exit;
+    }
+
+    public function fetchArray($in)
+    {
+        return include_once $in;
     }
 
     private function createInstance($file, $params)

@@ -1,21 +1,12 @@
 <?php
 
-namespace App\Routes;
-
 use App\Controllers\ApiController;
 use App\Middlewares\ExampleMiddleware;
+use Core\Routes\Routes;
 
-class Routes
-{
+Routes::get(["/teste", 'GET', ApiController::class, 'index', ExampleMiddleware::class]);
+Routes::get(["/teste/{id}", 'GET', ApiController::class, 'getById']);
+Routes::post(["/teste/{id}", 'POST', ApiController::class, 'create']);
+Routes::put(["/teste/{id}", 'PUT', ApiController::class, 'updateById']);
+Routes::delete(["/teste/{id}", 'DELETE', ApiController::class, 'deleteById']);
 
-    public static function RoutesList(): array
-    {
-        return [
-            ["/teste", 'GET', ApiController::class, 'index', ExampleMiddleware::class],
-            ["/teste/{id}", 'GET', ApiController::class, 'getById'],
-            ["/teste/{id}", 'POST', ApiController::class, 'create'],
-            ["/teste/{id}", 'PUT', ApiController::class, 'updateById'],
-            ["/teste/{id}", 'DELETE', ApiController::class, 'deleteById']
-        ];
-    }
-}
