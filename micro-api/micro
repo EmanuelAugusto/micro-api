@@ -1,6 +1,12 @@
 <?php
 require_once './vendor/autoload.php';
 
-use Core\Routes\Routes;
+use Core\Controller\AppController;
+use Core\Cli\Cli;
+
+$App = new AppController;
+
+$cli = new Cli;
+$cli->Run($argv);
 
 

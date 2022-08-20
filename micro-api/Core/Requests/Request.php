@@ -20,6 +20,14 @@ class Request
         return $_SERVER;
     }
 
+    public function Headers(string $input = "")
+    {
+        $headers = getallheaders();
+
+        return $input ? $headers[ucfirst($input)] : $headers;
+    }
+
+
     public function Input(string $input = "")
     {
         $method = $_SERVER['REQUEST_METHOD'];
