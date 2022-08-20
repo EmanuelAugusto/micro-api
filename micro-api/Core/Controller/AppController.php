@@ -176,9 +176,6 @@ class AppController
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
 
-        // var_dump($_SERVER['REQUEST_URI']);
-        // die();
-
         if (preg_match("/$reqUri/", $route) && $httpMethod === $file[1]) {
             $this->createInstance($file, $params);
             exit();
