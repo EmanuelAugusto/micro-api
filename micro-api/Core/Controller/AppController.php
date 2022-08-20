@@ -28,6 +28,11 @@ class AppController
     public function Run()
     {
 
+        $db = \Core\Db\Db::getInstance();
+
+        $db->raw('show tables');
+
+        die;
         foreach ($this->Routes as $key => $value) {
             $this->add($value[0], $value);
         }
