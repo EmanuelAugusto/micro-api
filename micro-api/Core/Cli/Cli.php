@@ -34,6 +34,33 @@ class Cli
         print_r($data);
     }
 
+    public static function help()
+    {
+
+        $data = [
+            [
+                "comando: db_consult", 
+                "explicação: recupera informações do banco de dados via cli"
+            ],
+            [
+                "comando: list_tables", 
+                "explicação: lista todas as tabelas"
+            ],
+            [
+                "comando: create_controller", 
+                "explicação: cria um controller"
+            ],
+            [
+                "comando: list_routes", 
+                "explicação: lista todas as rotas da aplicaçao"
+            ]
+        ];
+
+        foreach ($data as $key => $value) {
+            echo "$value[0] \n $value[1] \n";
+        }
+    }
+
 
     public static function create_controller($argv)
     {
