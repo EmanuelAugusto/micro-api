@@ -14,7 +14,7 @@ class ExampleMiddleware implements IMiddleware
         if($request->Input('user') === 'emanuel'){
             return $request;
         }else{
-            return $this->sendJson(['error'=> 'unauthorized'], 401);
+            throw new \Exception("unauthorized", 401);
         }
     }
 }
