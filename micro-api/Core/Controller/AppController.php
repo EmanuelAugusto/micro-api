@@ -27,18 +27,17 @@ class AppController
 
     public function Run()
     {
+        try {
+            foreach ($this->Routes as $key => $value) {
+                $this->add($value[0], $value);
+            }
 
-        $db = \Core\Db\Db::getInstance();
-
-        $db->raw('show tables');
-
-        die;
-        foreach ($this->Routes as $key => $value) {
-            $this->add($value[0], $value);
+            echo $this->sendJson(['error' => 'Not Found'], 404);
+            exit;
+        } catch (\Exception $e) {
+            echo $this->sendJson(['error' => $e->getMessage()], $e->getCode());
+            exit;
         }
-
-        echo $this->sendJson(['error' => 'Not Found'], 404);
-        exit;
     }
 
     public function fetchArray($in)

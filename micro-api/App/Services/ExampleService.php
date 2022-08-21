@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repository\ExampleRepository;
+use Core\Requests\Request;
 
 class ExampleService
 {
@@ -17,5 +18,12 @@ class ExampleService
     public function getFoo(): array
     {
         return $this->repositoryExample->getFooArrayList();
+    }
+
+    public function getFooById($id)
+    {
+        $data = $this->repositoryExample->getFooById($id);
+
+        return $data;
     }
 }

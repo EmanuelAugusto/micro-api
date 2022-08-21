@@ -4,7 +4,6 @@ namespace Core\Cli;
 
 use Core\Routes\Routes;
 
-
 class Cli
 {
 
@@ -17,6 +16,24 @@ class Cli
             echo "\n METHOD: $value[1] | PATH: $value[0] | CONTROLLER: $value[2] | FUNCTION: $value[3]  \n ";
         }
     }
+
+    public static function list_tables()
+    {
+        $data = \Core\Db\Db::raw('show tables')->find();
+
+        print_r($data);
+    }
+
+    public static function db_consult($argv)
+    {
+
+        $query = $argv[2];
+
+        $data = \Core\Db\Db::raw($query)->find();
+
+        print_r($data);
+    }
+
 
     public static function create_controller($argv)
     {
@@ -39,7 +56,11 @@ class $name extends Controller
     public function Run($argv)
     {
         try {
-            $comand = $argv[1];
+            $comand = $argv[1] ?? null;
+
+            if(!$comand){
+                throw new \Exception("error");
+            }
 
             self::$comand($argv);
         } catch (\Throwable $th) {
