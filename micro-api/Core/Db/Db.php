@@ -10,14 +10,14 @@ class Db
 
     private static $instances = [];
 
-    private $query = "";
+    protected $query = "";
 
     protected function __wakeup()
     {
         throw new \Exception('cannot_unserialize_a_singleton.');
     }
 
-    private static function getInstance()
+    protected static function getInstance()
     {
         $class = static::class;
 

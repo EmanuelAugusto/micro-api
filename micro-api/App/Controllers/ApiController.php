@@ -32,6 +32,14 @@ class ApiController extends Controller
         ]);
     }
 
+    public function getByIdOrm(Request $request, $id = null)
+    {
+
+        return $this->sendJson($this->serviceExample->getByIdOrm($id, $request), 200, [
+            'Cache-Control: no-store'
+        ]);
+    }
+
     public function create(Request $request)
     {
 

@@ -2,54 +2,55 @@
 
 namespace Core\Models;
 
-class Model
+use Core\Db\Db;
+
+class Model extends Db
 {
-    public $table = "";
-    public $connection = null;
 
-    const HOST = '';
-    const PORT = '';
-    const DATABASE = '';
-    const USER = '';
-    const PASSWORD = '';
+    private $constructor = [];
 
-    public function __construct()
+    public static function query()
     {
-        $this->connection = new \PDO("mysql:host=". self::HOST .";port=". self::PORT .";dbname=". self::DATABASE, 
-                                      self::USER, 
-                                      self::PASSWORD);
-        $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        $instance = parent::getInstance();
+
+        return $instance;
     }
 
-    public function Create(array $params = []) : bool
+    public function where($column, $value)
     {
-    
-        $columns = "";
-        $values = "";
-        
-        foreach ($params as $key => $value) {
-            $columns .= " $key,";
-            $values .= "' $value',";
+        array_push($this->constructor, [
+            $column, $value
+        ]);
+
+        return $this;
+    }
+
+    public function get()
+    {
+
+        $this->query = "select * from $this->table";
+
+        $clause = "";
+
+        $bind = [];
+
+        foreach ($this->constructor as $value) {
+            if($clause){
+                $clause .= " and $value[0] = :$value[0]";
+
+                $bind[":$value[0]"] = $value[1]; 
+            }else{
+                $clause .= " where $value[0] = :$value[0]";
+
+                $bind[":$value[0]"] = $value[1]; 
+            }
         }
-        $columns = rtrim($columns, ',');
-        $values = rtrim($values, ',');
 
-        $query = "INSERT INTO $this->table ($columns) VALUES($values)";
-        $result = $this->connection->exec($query);
+        $this->query = "$this->query $clause";
 
-        return $result ? true : false;
-    }
+        $data = $this->find($bind);
 
-    public function Get(array $params = [])
-    {
-        $query = $this->connection->prepare('SELECT * FROM '. $this->table .'WHERE 1');
-        $query->execute();
-
-        $result = $query->setFetchMode(\PDO::FETCH_ASSOC);
-
-        $result = $query->fetchObject();
-
-        var_dump($result);
-        die();
+        return $data;
     }
 }

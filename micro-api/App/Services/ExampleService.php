@@ -26,4 +26,11 @@ class ExampleService
 
         return $data;
     }
+
+    public function getByIdOrm($id, $request)
+    {
+        $data = $this->repositoryExample->getByIdOrm($id, $request);
+
+        return $data;
+    }
 }
